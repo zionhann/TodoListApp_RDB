@@ -57,7 +57,7 @@ public class TodoMain {
 				break;
 
 			default:
-				System.out.println("please enter one of the above mentioned command");
+				System.out.println("잘못된 명령어입니다. (명렁어 보기 -help)");
 				break;
 			}
 			
