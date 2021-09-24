@@ -15,7 +15,7 @@ public class TodoMain {
 		boolean isList = false;
 		boolean quit = false;
 		do {
-			Menu.displaymenu();
+			Menu.prompt();
 			isList = false;
 			String choice = sc.next();
 			switch (choice) {
@@ -56,6 +56,9 @@ public class TodoMain {
 				quit = true;
 				break;
 
+			case "help":
+				Menu.displaymenu();
+				break;
 			default:
 				System.out.println("잘못된 명령어입니다. (명렁어 보기 -help)");
 				break;
