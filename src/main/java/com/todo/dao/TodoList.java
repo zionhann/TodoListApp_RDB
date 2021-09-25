@@ -61,4 +61,24 @@ public class TodoList {
 		}
 		return false;
 	}
+
+	public Boolean isDuplicate(int num) {
+		for (TodoItem item : list) {
+			if (num == list.indexOf(item) + 1) return true;
+		}
+		return false;
+	}
+
+	public Boolean isDuplicateCate(String category) {
+		for (TodoItem item : list) {
+			if (category.equals(item.getCategory())) return true;
+		}
+		return false;
+	}
+
+	public Boolean isInteger(String due_date) {
+		try { Integer.parseInt(due_date); }
+		catch(NumberFormatException e) { return false; }
+		return true;
+	}
 }
