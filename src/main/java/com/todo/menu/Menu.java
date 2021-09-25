@@ -11,11 +11,10 @@ public class Menu {
         System.out.println("5. 오름차순 정렬 ( ls_name_asc )");
         System.out.println("6. 내림차순 정렬 ( ls_name_desc )");
         System.out.println("7. 생성 날짜순 정렬 ( ls_date )");
-        System.out.println("8. 종료 ( exit 또는 esc )");
+        System.out.println("8. 종료 ( exit )");
     }
 
     public static void prompt() {
         System.out.print("명령어 입력 > ");
     }
 }
-
