@@ -15,32 +15,32 @@ public class TodoUtil {
 
 		System.out.println("\n"
 				+ "========== 할 일 추가\n"
-				+ "카테고리를 입력하세요.\n");
+				+ "카테고리를 입력하세요.");
 
 		category = sc.nextLine();
 
 		System.out.println("\n"
-				+ "할 일을 입력하세요.\n");
+				+ "할 일을 입력하세요.");
 
 		title = sc.nextLine();
 		if (list.isDuplicate(title) && list.isDuplicateCate(category)) {
-			System.out.printf("이미 존재하는 할 일입니다.");
+			System.out.printf("이미 존재하는 할 일입니다.\n");
 			return;
 		}
 
 		System.out.println("\n" +
-						"메모를 입력하세요.\n");
+						"메모를 입력하세요.");
 		desc = sc.nextLine();
 
 		System.out.println("\n" +
-				"마감일을 입력하세요.(YYYYMMDD\n");
+				"마감일을 입력하세요.(YYYYMMDD)");
 		due_date = sc.nextLine();
 		if(!list.isInteger(due_date)) {
-			System.out.println("숫자가 아닙니다.");
+			System.out.println("숫자가 아닙니다.\n");
 			return;
 		}
 		else if(due_date.length() != 8) {
-			System.out.println("8자리가 아닙니다.");
+			System.out.println("8자리가 아닙니다.\n");
 			return;
 		}
 
@@ -55,18 +55,17 @@ public class TodoUtil {
 
 		System.out.println("\n"
 				+ "========== 할 일 삭제\n"
-				+ "삭제할 할 일의 번호를 입력하세요.\n"
-				+ "\n");
+				+ "삭제할 할 일의 번호를 입력하세요.");
 		int num = sc.nextInt();
 		for (TodoItem item : l.getList()) {
 			if (num == l.indexOf(item) + 1) {
 				l.deleteItem(item);
-				System.out.println("삭제되었습니다.");
+				System.out.println("삭제되었습니다.\n");
 				isDeleted = true;
 				break;
 			}
 		}
-		if(!isDeleted) System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.");
+		if(!isDeleted) System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
 	}
 
 
@@ -76,11 +75,10 @@ public class TodoUtil {
 
 		System.out.println("\n"
 				+ "========== 할 일 수정\n"
-				+ "수정할 할 일의 번호를 입력하세요.\n"
-				+ "\n");
+				+ "수정할 할 일의 번호를 입력하세요.");
 		int num = sc.nextInt();
 		if(!l.isDuplicate(num)) {
-			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.");
+			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
 		}
 		for(TodoItem item : l.getList()) {
 			if(num == l.indexOf(item) + 1) {
@@ -95,21 +93,21 @@ public class TodoUtil {
 		System.out.println("\n새로운 할 일을 입력하세요.");
 		String new_title = sc.nextLine().trim();
 		if (l.isDuplicate(new_title) && l.isDuplicateCate(new_category)) {
-			System.out.println("해당 카테고리에 이미 존재하는 할 일입니다.");
+			System.out.println("해당 카테고리에 이미 존재하는 할 일입니다.\n");
 			return;
 		}
 
-		System.out.println("새로운 메모를 입력하세요.");
+		System.out.println("\n새로운 메모를 입력하세요.");
 		String new_description = sc.nextLine().trim();
 
-		System.out.println("새로운 마감일을 입력하세요(YYYYMMDD).");
+		System.out.println("\n새로운 마감일을 입력하세요(YYYYMMDD).");
 		String new_due_date = sc.nextLine().trim();
 		if(!l.isInteger(new_due_date)) {
-			System.out.println("숫자가 아닙니다.");
+			System.out.println("숫자가 아닙니다.\n");
 			return;
 		}
 		else if(new_due_date.length() != 8) {
-			System.out.println("8자리가 아닙니다.");
+			System.out.println("8자리가 아닙니다.\n");
 			return;
 		}
 
@@ -118,7 +116,7 @@ public class TodoUtil {
 				l.deleteItem(item);
 				TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date);
 				l.addItem(t);
-				System.out.println("할 일이 수정되었습니다.");
+				System.out.println("할 일이 수정되었습니다.\n");
 			}
 		}
 
@@ -126,7 +124,7 @@ public class TodoUtil {
 
 	public static void listAll(TodoList l) {
 		for (TodoItem item : l.getList()) {
-			System.out.println("할 일: " + item.getTitle() + "  메모:  " + item.getDesc() + " - " + item.getCurrent_date());
+			System.out.println(l.indexOf(item)+1 + "." + item.toString());
 		}
 	}
 
@@ -138,7 +136,7 @@ public class TodoUtil {
 				w.write(item.toSaveString());
 			}
 			w.close();
-			System.out.println("데이터가 저장되었습니다.");
+			System.out.println("데이터가 저장되었습니다.\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -163,10 +161,10 @@ public class TodoUtil {
 				count++;
 			}
 			br.close();
-			System.out.println(count+"개의 할 일을 읽었습니다.");
+			System.out.println(count+"개의 할 일을 읽었습니다.\n");
 		}
 		catch (FileNotFoundException e) {
-			System.out.println(filename+" 파일이 없습니다.");
+			System.out.println(filename+" 파일이 없습니다.\n");
 			//e.printStackTrace();
 		}
 		catch (IOException e) {
