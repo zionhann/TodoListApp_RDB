@@ -24,7 +24,7 @@ public class TodoUtil {
 
 		title = sc.nextLine();
 		if (list.isDuplicate(title) && list.isDuplicateCate(category)) {
-			System.out.printf("이미 존재하는 할 일입니다.\n");
+			System.out.println("이미 존재하는 할 일입니다.\n");
 			return;
 		}
 
@@ -79,6 +79,7 @@ public class TodoUtil {
 		int num = sc.nextInt();
 		if(!l.isDuplicate(num)) {
 			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+			return;
 		}
 		for(TodoItem item : l.getList()) {
 			if(num == l.indexOf(item) + 1) {
