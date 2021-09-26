@@ -57,12 +57,19 @@ public class TodoUtil {
 				+ "========== 할 일 삭제\n"
 				+ "삭제할 할 일의 번호를 입력하세요.");
 		int num = sc.nextInt();
+		String lineFeed = sc.nextLine();
 		for (TodoItem item : l.getList()) {
 			if (num == l.indexOf(item) + 1) {
-				l.deleteItem(item);
-				System.out.println("삭제되었습니다.\n");
-				isDeleted = true;
-				break;
+				System.out.println(num + "." + item.toString());
+				System.out.println("위 항목을 삭제하시겠습니까? (y/n)\n");
+				String input = sc.next().trim();
+				if(Objects.equals(input, "y")) {
+					l.deleteItem(item);
+					System.out.println("삭제되었습니다.\n");
+					isDeleted = true;
+				}
+				else return;
+			break;
 			}
 		}
 		if(!isDeleted) System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
@@ -77,6 +84,7 @@ public class TodoUtil {
 				+ "========== 할 일 수정\n"
 				+ "수정할 할 일의 번호를 입력하세요.");
 		int num = sc.nextInt();
+		String lineFeed = sc.nextLine();
 		if(!l.isDuplicate(num)) {
 			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
 			return;
