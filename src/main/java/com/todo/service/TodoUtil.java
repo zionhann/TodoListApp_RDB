@@ -158,6 +158,7 @@ public class TodoUtil {
 				String current_date = st.nextToken();
 				TodoItem item = new TodoItem(title, description, category, due_date);
 				item.setCurrent_date(current_date);
+				item.setDue_date(due_date);
 				l.addItem(item);
 				count++;
 			}

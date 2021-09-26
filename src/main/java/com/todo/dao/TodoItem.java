@@ -45,6 +45,8 @@ public class TodoItem {
 
     public void setCurrent_date(String current_date) { this.current_date = current_date; }
 
+    public void setDue_date(String due_date) { this.due_date = due_date; }
+
     @Override
     public String toString() { return " [" + category + "] " + title + " - " + desc + " - " + due_date + " - " + current_date; }
 
