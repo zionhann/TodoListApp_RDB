@@ -53,6 +53,12 @@ public class TodoMain {
 				isList = true;
 				break;
 
+			case "ls_date_desc":
+				l.sortByDate();
+				l.reverseList();
+				isList = true;
+				break;
+
 			case "find": {
 				String keyword = sc.next().trim();
 				TodoUtil.findItem(l, keyword);
