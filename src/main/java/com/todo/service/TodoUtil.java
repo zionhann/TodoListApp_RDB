@@ -172,4 +172,28 @@ public class TodoUtil {
 			e.printStackTrace();
 		}
 	}
+
+	public static void findItem(TodoList l, String keyword) {
+		boolean isFound = false;
+
+		for(TodoItem item : l.getList()) {
+			if(item.getTitle().contains(keyword) || item.getDesc().contains(keyword)) {
+				System.out.println(l.indexOf(item) + 1 + "." + item);
+				isFound = true;
+			}
+		}
+		if(!isFound) System.out.println("키워드에 해당하는 할 일이나 메모를 찾을 수 없습니다.");
+	}
+
+	public static void findItem_cate(TodoList l, String keyword) {
+		boolean isFound = false;
+
+		for(TodoItem item : l.getList()) {
+			if(item.getCategory().contains(keyword)) {
+				System.out.println(l.indexOf(item) + 1 + "." + item);
+				isFound = true;
+			}
+		}
+		if(!isFound) System.out.println("키워드에 해당하는 카테고리를 찾을 수 없습니다.");
+	}
 }

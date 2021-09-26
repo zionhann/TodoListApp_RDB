@@ -53,6 +53,18 @@ public class TodoMain {
 				isList = true;
 				break;
 
+			case "find": {
+				String keyword = sc.next().trim();
+				TodoUtil.findItem(l, keyword);
+				break;
+			}
+
+			case "find_cate": {
+				String keyword = sc.next().trim();
+				TodoUtil.findItem_cate(l, keyword);
+				break;
+			}
+
 			case "exit":
 				quit = true;
 				TodoUtil.saveList(l,"todolist.txt");
