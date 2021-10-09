@@ -133,6 +133,33 @@ public class TodoList {
 		}
 		return list;
 	}
+	public ArrayList<TodoItem> getList_cate(String keyword) {
+		ArrayList<TodoItem> list = new ArrayList<>();
+		String sql = "SELECT * FROM list WHERE Category= ?;";
+		PreparedStatement ps;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, keyword);
+			ResultSet r = ps.executeQuery();
+			while(r.next()) {
+				int id = r.getInt("ID");
+				String category = r.getString("Category");
+				String title = r.getString("Title");
+				String desc = r.getString("Memo");
+				String due_date = r.getString("Due_date");
+				String current_date = r.getString("Current_date");
+				TodoItem item = new TodoItem(title, desc, category, due_date);
+				item.setID(id);
+				item.setCurrent_date(current_date);
+				item.setDue_date(due_date);
+				list.add(item);
+			}
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 	public int numberOf() {
 		Statement s;

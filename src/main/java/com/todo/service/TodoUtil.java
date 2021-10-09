@@ -204,11 +204,9 @@ public class TodoUtil {
 	public static void findItem_cate(TodoList l, String keyword) {
 		boolean isFound = false;
 
-		for(TodoItem item : l.getList()) {
-			if(item.getCategory().contains(keyword)) {
-				System.out.println(l.indexOf(item) + 1 + "." + item);
+		for(TodoItem item : l.getList_cate(keyword)) {
+				System.out.println(item);
 				isFound = true;
-			}
 		}
 		if(!isFound) System.out.println("키워드에 해당하는 카테고리를 찾을 수 없습니다.");
 	}
