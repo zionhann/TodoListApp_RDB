@@ -40,8 +40,19 @@ public class TodoList {
 		return isAdded;
 	}
 
-	public void deleteItem(TodoItem t) {
-		list.remove(t);
+	public int deleteItem(TodoItem t) {
+		String sql = "DELETE FROM list WHERE ID=?;";
+		PreparedStatement ps;
+		int isDeleted=0;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, t.getID());
+			isDeleted = ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return isDeleted;
 	}
 
 	public int editItem(TodoItem t) {

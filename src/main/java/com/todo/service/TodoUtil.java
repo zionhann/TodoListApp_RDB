@@ -60,14 +60,15 @@ public class TodoUtil {
 		int num = sc.nextInt();
 		String lineFeed = sc.nextLine();
 		for (TodoItem item : l.getList()) {
-			if (num == l.indexOf(item) + 1) {
-				System.out.println(num + "." + item.toString());
+			if (num == item.getID()) {
+				System.out.println(item);
 				System.out.println("위 항목을 삭제하시겠습니까? (y/n)\n");
 				String input = sc.next().trim();
 				if(Objects.equals(input, "y")) {
-					l.deleteItem(item);
-					System.out.println("삭제되었습니다.\n");
-					isDeleted = true;
+					if(l.deleteItem(item) > 0) {
+						System.out.println("삭제되었습니다.\n");
+						isDeleted = true;
+					}
 				}
 				else return;
 			break;
