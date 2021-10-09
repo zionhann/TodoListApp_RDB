@@ -86,13 +86,13 @@ public class TodoUtil {
 				+ "수정할 할 일의 번호를 입력하세요.");
 		int num = sc.nextInt();
 		String lineFeed = sc.nextLine();
-		if(!l.isDuplicate(num)) {
-			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
-			return;
-		}
+//		if(!l.isDuplicate(num)) {
+//			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+//			return;
+//		}
 		for(TodoItem item : l.getList()) {
-			if(num == l.indexOf(item) + 1) {
-				System.out.println(num + "." + item.toString());
+			if(num == item.getID()) {
+				System.out.println(item);
 				break;
 			}
 		}
@@ -102,10 +102,10 @@ public class TodoUtil {
 
 		System.out.println("\n새로운 할 일을 입력하세요.");
 		String new_title = sc.nextLine().trim();
-		if (l.isDuplicate(new_title) && l.isDuplicateCate(new_category)) {
-			System.out.println("해당 카테고리에 이미 존재하는 할 일입니다.\n");
-			return;
-		}
+//		if (l.isDuplicate(new_title) && l.isDuplicateCate(new_category)) {
+//			System.out.println("해당 카테고리에 이미 존재하는 할 일입니다.\n");
+//			return;
+//		}
 
 		System.out.println("\n새로운 메모를 입력하세요.");
 		String new_description = sc.nextLine().trim();
@@ -121,15 +121,10 @@ public class TodoUtil {
 			return;
 		}
 
-		for (TodoItem item : l.getList()) {
-			if (num == l.indexOf(item) + 1) {
-				l.deleteItem(item);
-				TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date);
-				l.addItem(t);
-				System.out.println("할 일이 수정되었습니다.\n");
-			}
-		}
-
+		TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date);
+		t.setID(num);
+		if(l.editItem(t) > 0)
+			System.out.println("할 일이 수정되었습니다.\n");
 	}
 
 	public static void listAll(TodoList l) {

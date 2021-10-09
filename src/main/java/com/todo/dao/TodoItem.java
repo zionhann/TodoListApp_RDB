@@ -59,6 +59,10 @@ public class TodoItem {
         return due_date;
     }
 
+    public int getID() {
+        return ID;
+    }
+
     public void setID(int ID) {
         this.ID = ID;
     }

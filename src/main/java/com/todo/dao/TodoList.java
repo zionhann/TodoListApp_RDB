@@ -44,10 +44,25 @@ public class TodoList {
 		list.remove(t);
 	}
 
-	void editItem(TodoItem t, TodoItem updated) {
-		int index = list.indexOf(t);
-		list.remove(index);
-		list.add(updated);
+	public int editItem(TodoItem t) {
+		String sql = "UPDATE list SET Title=?, Memo=?, Category=?, Current_date=?, Due_date=?"
+					+ "WHERE ID=?;";
+		PreparedStatement ps;
+		int isAdded =0;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, t.getTitle());
+			ps.setString(2, t.getDesc());
+			ps.setString(3, t.getCategory());
+			ps.setString(4, t.getCurrent_date());
+			ps.setString(5, t.getDue_date());
+			ps.setInt(6, t.getID());
+			isAdded = ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return isAdded;
 	}
 
 	public ArrayList<TodoItem> getList() {
