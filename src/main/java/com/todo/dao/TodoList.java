@@ -161,6 +161,23 @@ public class TodoList {
 		return list;
 	}
 
+	public ArrayList<String> getList_cateOnly() {
+		ArrayList<String> list = new ArrayList<>();
+		String sql = "SELECT DISTINCT Category FROM list;";
+		try {
+			Statement s = con.createStatement();
+			ResultSet rs = s.executeQuery(sql);
+
+			while(rs.next()){
+				String category = rs.getString("Category");
+				list.add(category);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 	public int numberOf() {
 		Statement s;
 		int num=0;

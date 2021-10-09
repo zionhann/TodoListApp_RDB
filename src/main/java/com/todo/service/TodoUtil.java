@@ -136,14 +136,10 @@ public class TodoUtil {
 	}
 
 	public static void listCate(TodoList l) {
-		ArrayList<String> cateList = new ArrayList<>();
-		for (TodoItem item : l.getList()) {
-				if(!cateList.contains(item.getCategory()))
-					cateList.add(item.getCategory());
-			}
+		ArrayList<String> cateList = l.getList_cateOnly();
 		String e = String.join(" / ", cateList);
 		System.out.println(e);
-		System.out.println("총 " + cateList.size() + "개의 카테고리가 등록되어 있습니다.");
+		System.out.println("총 " +cateList.size() + "개의 카테고리가 등록되어 있습니다.");
 	}
 
 	public static void saveList(TodoList l, String filename) {
