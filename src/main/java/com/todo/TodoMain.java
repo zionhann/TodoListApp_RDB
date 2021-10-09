@@ -12,10 +12,10 @@ public class TodoMain {
 	
 		Scanner sc = new Scanner(System.in);
 		TodoList l = new TodoList();
-		l.importData("todolist.txt");
+		//l.importData("todolist.txt");
 		boolean isList = false;
 		boolean quit = false;
-		TodoUtil.loadList(l, "todolist.txt");
+		//TodoUtil.loadList(l, "todolist.txt");
 		do {
 			Menu.prompt();
 			isList = false;
@@ -78,7 +78,8 @@ public class TodoMain {
 
 			case "exit":
 				quit = true;
-				TodoUtil.saveList(l,"todolist.txt");
+				//TodoUtil.saveList(l,"todolist.txt");
+				l.setConClose();
 				break;
 
 			case "help":
