@@ -23,10 +23,10 @@ public class TodoUtil {
 				+ "할 일을 입력하세요.");
 
 		title = sc.nextLine();
-//		if (list.isDuplicate(title) && list.isDuplicateCate(category)) {
-//			System.out.println("이미 존재하는 할 일입니다.\n");
-//			return;
-//		}
+		if (list.isDuplicate(title, list.getList()) && list.isDuplicateCate(category, list.getList())) {
+			System.out.println("이미 존재하는 할 일입니다.\n");
+			return;
+		}
 
 		System.out.println("\n" +
 						"메모를 입력하세요.");
@@ -87,10 +87,10 @@ public class TodoUtil {
 				+ "수정할 할 일의 번호를 입력하세요.");
 		int num = sc.nextInt();
 		String lineFeed = sc.nextLine();
-//		if(!l.isDuplicate(num)) {
-//			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
-//			return;
-//		}
+		if(!l.isDuplicate(num, l.getList())) {
+			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+			return;
+		}
 		for(TodoItem item : l.getList()) {
 			if(num == item.getID()) {
 				System.out.println(item);
@@ -103,10 +103,10 @@ public class TodoUtil {
 
 		System.out.println("\n새로운 할 일을 입력하세요.");
 		String new_title = sc.nextLine().trim();
-//		if (l.isDuplicate(new_title) && l.isDuplicateCate(new_category)) {
-//			System.out.println("해당 카테고리에 이미 존재하는 할 일입니다.\n");
-//			return;
-//		}
+		if (l.isDuplicate(new_title, l.getList()) && l.isDuplicateCate(new_category, l.getList())) {
+			System.out.println("해당 카테고리에 이미 존재하는 할 일입니다.\n");
+			return;
+		}
 
 		System.out.println("\n새로운 메모를 입력하세요.");
 		String new_description = sc.nextLine().trim();
@@ -135,7 +135,7 @@ public class TodoUtil {
 		}
 	}
 
-	//@overloading
+	//@overload
 	public static void listAll(TodoList l, String keyword, boolean desc) {
 		System.out.println(l.numberOf() + " items");
 		for (TodoItem item : l.orderBy(keyword, desc)) {

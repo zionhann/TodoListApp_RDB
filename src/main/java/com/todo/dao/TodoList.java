@@ -104,7 +104,7 @@ public class TodoList {
 		return list;
 	}
 
-	//@overloading
+	//@overload
 	public ArrayList<TodoItem> getList(String keyword) {
 		ArrayList<TodoItem> list = new ArrayList<>();
 		String sql = "SELECT * FROM list WHERE Title LIKE ? OR Memo LIKE ?;";
@@ -244,22 +244,22 @@ public class TodoList {
 		return list.indexOf(t);
 	}
 
-	public Boolean isDuplicate(String title) {
-		for (TodoItem item : list) {
+	public Boolean isDuplicate(String title, ArrayList<TodoItem> l) {
+		for (TodoItem item : l) {
 			if (title.equals(item.getTitle())) return true;
 		}
 		return false;
 	}
-
-	public Boolean isDuplicate(int num) {
-		for (TodoItem item : list) {
-			if (num == list.indexOf(item) + 1) return true;
+	//@Overload
+	public Boolean isDuplicate(int num, ArrayList<TodoItem> l) {
+		for (TodoItem item : l) {
+			if (num == item.getID()) return true;
 		}
 		return false;
 	}
 
-	public Boolean isDuplicateCate(String category) {
-		for (TodoItem item : list) {
+	public Boolean isDuplicateCate(String category, ArrayList<TodoItem> l) {
+		for (TodoItem item : l) {
 			if (category.equals(item.getCategory())) return true;
 		}
 		return false;
