@@ -5,24 +5,24 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnect {
-    private static Connection conn = null;
+    private static Connection c = null;
 
     public static Connection getConnection() {
-        if(conn == null) {
+        if(c == null) {
             try {
                 Class.forName("org.sqlite.JDBC");
-                conn = DriverManager.getConnection("jdbc:sqlite:" + "todolist.db");
+                c = DriverManager.getConnection("jdbc:sqlite:" + "todolist.db");
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
         }
-        return conn;
+        return c;
     }
 
     public static void closeConnection() {
-        if(conn != null) {
+        if(c != null) {
             try {
-                conn.close();
+                c.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
