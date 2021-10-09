@@ -135,6 +135,14 @@ public class TodoUtil {
 		}
 	}
 
+	//@overloading
+	public static void listAll(TodoList l, String keyword, boolean desc) {
+		System.out.println(l.numberOf() + " items");
+		for (TodoItem item : l.orderBy(keyword, desc)) {
+			System.out.println(item.toString());
+		}
+	}
+
 	public static void listCate(TodoList l) {
 		ArrayList<String> cateList = l.getList_cateOnly();
 		String e = String.join(" / ", cateList);

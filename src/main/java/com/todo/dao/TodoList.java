@@ -194,6 +194,32 @@ public class TodoList {
 		return num;
 	}
 
+	public ArrayList<TodoItem> orderBy(String keyword, boolean desc) {
+		ArrayList<TodoItem> list = new ArrayList<>();
+		String sql = "SELECT * FROM list ORDER BY " + keyword;
+		if(desc) sql += " DESC";
+		try {
+			Statement s = con.createStatement();
+			ResultSet r = s.executeQuery(sql);
+
+			while(r.next()) {
+				int id = r.getInt("ID");
+				String category = r.getString("Category");
+				String title = r.getString("Title");
+				String memo = r.getString("Memo");
+				String due_date = r.getString("Due_date");
+				String current_date = r.getString("Current_date");
+				TodoItem item = new TodoItem(title, memo, category, due_date);
+				item.setID(id);
+				item.setCurrent_date(current_date);
+				item.setDue_date(due_date);
+				list.add(item);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	public void sortByName() {
 		Collections.sort(list, new TodoSortByName());
 

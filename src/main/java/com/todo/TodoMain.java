@@ -43,24 +43,22 @@ public class TodoMain {
 				break;
 
 			case "ls_name_asc":
-				l.sortByName();
+				TodoUtil.listAll(l, "Title", false);
 				isList = true;
 				break;
 
 			case "ls_name_desc":
-				l.sortByName();
-				l.reverseList();
+				TodoUtil.listAll(l, "Title", true);
 				isList = true;
 				break;
 				
 			case "ls_date":
-				l.sortByDate();
+				TodoUtil.listAll(l, "Due_date", false);
 				isList = true;
 				break;
 
 			case "ls_date_desc":
-				l.sortByDate();
-				l.reverseList();
+				TodoUtil.listAll(l, "Due_date", true);
 				isList = true;
 				break;
 
