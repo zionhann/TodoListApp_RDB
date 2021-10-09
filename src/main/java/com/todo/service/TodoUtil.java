@@ -23,10 +23,10 @@ public class TodoUtil {
 				+ "할 일을 입력하세요.");
 
 		title = sc.nextLine();
-		if (list.isDuplicate(title) && list.isDuplicateCate(category)) {
-			System.out.println("이미 존재하는 할 일입니다.\n");
-			return;
-		}
+//		if (list.isDuplicate(title) && list.isDuplicateCate(category)) {
+//			System.out.println("이미 존재하는 할 일입니다.\n");
+//			return;
+//		}
 
 		System.out.println("\n" +
 						"메모를 입력하세요.");
@@ -45,7 +45,8 @@ public class TodoUtil {
 		}
 
 		TodoItem t = new TodoItem(title, desc, category, due_date);
-		list.addItem(t);
+		if(list.addItem(t)>0)
+			System.out.println("추가되었습니다.");
 	}
 
 	public static void deleteItem(TodoList l) {
@@ -132,8 +133,9 @@ public class TodoUtil {
 	}
 
 	public static void listAll(TodoList l) {
+		System.out.println(l.numberOf() + " items");
 		for (TodoItem item : l.getList()) {
-			System.out.println(l.indexOf(item)+1 + "." + item.toString());
+			System.out.println(item.toString());
 		}
 	}
 
