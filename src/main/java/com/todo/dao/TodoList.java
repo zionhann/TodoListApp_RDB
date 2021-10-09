@@ -3,11 +3,10 @@ package com.todo.dao;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
+import com.todo.TodoMain;
 import com.todo.service.TodoSortByDate;
 import com.todo.service.TodoSortByName;
 import com.todo.db.DBConnect;
@@ -21,8 +20,24 @@ public class TodoList {
 		this.con = DBConnect.getConnection();
 	}
 
-	public void addItem(TodoItem t) {
-		list.add(t);
+	public int addItem(TodoItem t) {
+		String sql = "INSERT INTO list (Title, Memo, Category, Current_date, Due_date)"
+					+ "VALUES (?, ?, ?, ?, ?);";
+		PreparedStatement ps;
+		int isAdded = 0;
+		try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, t.getTitle());
+			ps.setString(2, t.getDesc());
+			ps.setString(3, t.getCategory());
+			ps.setString(4, t.getCurrent_date());
+			ps.setString(5, t.getDue_date());
+			isAdded = ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return isAdded;
 	}
 
 	public void deleteItem(TodoItem t) {
@@ -36,7 +51,46 @@ public class TodoList {
 	}
 
 	public ArrayList<TodoItem> getList() {
-		return new ArrayList<TodoItem>(list);
+		ArrayList<TodoItem> list = new ArrayList<>();
+		Statement s;
+		try {
+			s = con.createStatement();
+			String sql = "SELECT * FROM list;";
+			ResultSet r = s.executeQuery(sql);
+
+			while(r.next()) {
+				int id = r.getInt("ID");
+				String category = r.getString("Category");
+				String title = r.getString("Title");
+				String desc = r.getString("Memo");
+				String due_date = r.getString("Due_date");
+				String current_date = r.getString("Current_date");
+				TodoItem item = new TodoItem(title, desc, category, due_date);
+				item.setID(id);
+				item.setCurrent_date(current_date);
+				list.add(item);
+			}
+			s.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public int numberOf() {
+		Statement s;
+		int num=0;
+		try {
+			s = con.createStatement();
+			String sql = "SELECT count(ID) FROM list;";
+			ResultSet r = s.executeQuery(sql);
+			r.next();
+			num = r.getInt("count(ID)");
+			s.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return num;
 	}
 
 	public void sortByName() {
@@ -47,7 +101,7 @@ public class TodoList {
 	public void listAll() {
 
 		for (TodoItem item : list) {
-			System.out.println(list.indexOf(item)+1 + "." + item.toString());
+			System.out.println(item.toString());
 		}
 	}
 	
@@ -119,5 +173,9 @@ public class TodoList {
 		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void setConClose() {
+		DBConnect.closeConnection();
 	}
 }
