@@ -83,6 +83,7 @@ public class TodoList {
 				TodoItem item = new TodoItem(title, desc, category, due_date);
 				item.setID(id);
 				item.setCurrent_date(current_date);
+				item.setDue_date(due_date);
 				list.add(item);
 			}
 			s.close();
