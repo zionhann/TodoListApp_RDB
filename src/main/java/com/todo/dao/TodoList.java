@@ -247,6 +247,24 @@ public class TodoList {
 		return num;
 	}
 
+	//@Overload
+	public int numberOf(boolean isCompleted) {
+		int num=0;
+		int condition = (isCompleted) ? 1 : 0;
+		String sql = "SELECT count(ID) FROM list WHERE isCompleted=?;";
+		try {
+			PreparedStatement p = con.prepareStatement(sql);
+			p.setInt(1, condition);
+			ResultSet r = p.executeQuery();
+			r.next();
+			num = r.getInt("count(ID)");
+			p.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return num;
+	}
+
 	public ArrayList<TodoItem> orderBy(String keyword, boolean desc) {
 		ArrayList<TodoItem> list = new ArrayList<>();
 		String sql = "SELECT * FROM list ORDER BY " + keyword;

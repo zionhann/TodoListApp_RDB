@@ -161,7 +161,7 @@ public class TodoUtil {
 
 	//@overload
 	public static void listAll(TodoList l, boolean isCompleted) {
-		System.out.println(l.numberOf() + " items");
+		System.out.println(l.numberOf(isCompleted) + " items");
 		for (TodoItem item : l.getList(isCompleted)) {
 			System.out.println(item.toString());
 		}
