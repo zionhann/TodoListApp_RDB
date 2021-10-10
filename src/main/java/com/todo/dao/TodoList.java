@@ -21,8 +21,8 @@ public class TodoList {
 	}
 
 	public int addItem(TodoItem t) {
-		String sql = "INSERT INTO list (Title, Memo, Category, Current_date, Due_date)"
-					+ "VALUES (?, ?, ?, ?, ?);";
+		String sql = "INSERT INTO list (Title, Memo, Category, Current_date, Due_date, isCompleted)"
+					+ "VALUES (?, ?, ?, ?, ?, ?);";
 		PreparedStatement ps;
 		int isAdded = 0;
 		try {
@@ -32,6 +32,7 @@ public class TodoList {
 			ps.setString(3, t.getCategory());
 			ps.setString(4, t.getCurrent_date());
 			ps.setString(5, t.getDue_date());
+			ps.setInt(6, t.isCompleted());
 			isAdded = ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
@@ -76,6 +77,20 @@ public class TodoList {
 		return isAdded;
 	}
 
+	public void checkItem(int index, int isCompleted) {
+		String sql = "UPDATE list SET isCompleted=?"
+					+ "WHERE ID=?;";
+		try {
+			PreparedStatement p = con.prepareStatement(sql);
+			p.setInt(1, (isCompleted>0)?0:1);
+			p.setInt(2, index);
+			p.executeUpdate();
+			p.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public ArrayList<TodoItem> getList() {
 		ArrayList<TodoItem> list = new ArrayList<>();
 		Statement s;
@@ -91,7 +106,9 @@ public class TodoList {
 				String desc = r.getString("Memo");
 				String due_date = r.getString("Due_date");
 				String current_date = r.getString("Current_date");
-				TodoItem item = new TodoItem(title, desc, category, due_date);
+				int isCompleted = r.getInt("isCompleted");
+
+				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);
@@ -121,7 +138,9 @@ public class TodoList {
 				String desc = r.getString("Memo");
 				String due_date = r.getString("Due_date");
 				String current_date = r.getString("Current_date");
-				TodoItem item = new TodoItem(title, desc, category, due_date);
+				int isCompleted = r.getInt("isCompleted");
+
+				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);
@@ -133,6 +152,38 @@ public class TodoList {
 		}
 		return list;
 	}
+
+	//@Overload
+	public ArrayList<TodoItem> getList(boolean isCompleted) {
+		ArrayList<TodoItem> list = new ArrayList<>();
+		String sql = "SELECT * FROM list WHERE isCompleted =?;";
+		try {
+			PreparedStatement p = con.prepareStatement(sql);
+			p.setInt(1, (isCompleted)?1:0);
+			ResultSet r = p.executeQuery();
+
+			while(r.next()){
+				int id = r.getInt("ID");
+				String category = r.getString("Category");
+				String title = r.getString("Title");
+				String desc = r.getString("Memo");
+				String due_date = r.getString("Due_date");
+				String current_date = r.getString("Current_date");
+				int completed = r.getInt("isCompleted");
+
+				TodoItem item = new TodoItem(title, desc, category, due_date, completed>0);
+				item.setID(id);
+				item.setCurrent_date(current_date);
+				item.setDue_date(due_date);
+				list.add(item);
+			}
+			p.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 	public ArrayList<TodoItem> getList_cate(String keyword) {
 		ArrayList<TodoItem> list = new ArrayList<>();
 		String sql = "SELECT * FROM list WHERE Category= ?;";
@@ -148,7 +199,9 @@ public class TodoList {
 				String desc = r.getString("Memo");
 				String due_date = r.getString("Due_date");
 				String current_date = r.getString("Current_date");
-				TodoItem item = new TodoItem(title, desc, category, due_date);
+				int isCompleted = r.getInt("isCompleted");
+
+				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);
@@ -209,7 +262,9 @@ public class TodoList {
 				String memo = r.getString("Memo");
 				String due_date = r.getString("Due_date");
 				String current_date = r.getString("Current_date");
-				TodoItem item = new TodoItem(title, memo, category, due_date);
+				int isCompleted = r.getInt("isCompleted");
+
+				TodoItem item = new TodoItem(title, memo, category, due_date, isCompleted>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);

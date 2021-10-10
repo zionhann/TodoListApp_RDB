@@ -33,9 +33,19 @@ public class TodoMain {
 			case "edit":
 				TodoUtil.updateItem(l);
 				break;
+
+			case "comp": {
+				int index = sc.nextInt();
+				TodoUtil.completeItem(l, index);
+				break;
+			}
 				
 			case "ls":
 				TodoUtil.listAll(l);
+				break;
+
+			case "ls_comp":
+				TodoUtil.listAll(l, true);
 				break;
 
 			case "ls_cate":
@@ -87,8 +97,7 @@ public class TodoMain {
 				System.out.println("잘못된 명령어입니다. (명렁어 보기 -help)");
 				break;
 			}
-			
-			if(isList) l.listAll();
+
 		} while (!quit);
 	}
 }
