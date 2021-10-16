@@ -1,10 +1,12 @@
 package com.todo.service;
 
-import java.io.*;
-import java.util.*;
-
 import com.todo.dao.TodoItem;
 import com.todo.dao.TodoList;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class TodoUtil {
 
@@ -65,29 +67,37 @@ public class TodoUtil {
 	public static void deleteItem(TodoList l) {
 
 		Scanner sc = new Scanner(System.in);
-		boolean isDeleted = false;
+		boolean doesExist = false;
+		List<String> selectedNum;
+		String input;
 
 		System.out.println("\n"
 				+ "========== 할 일 삭제\n"
 				+ "삭제할 할 일의 번호를 입력하세요.");
-		int num = sc.nextInt();
-		String lineFeed = sc.nextLine();
+		String num = sc.nextLine().trim();
+		if(num.contains(",")) selectedNum = List.of(num.split(", "));
+		else selectedNum = List.of(num.split(" "));
+
+		//String lineFeed = sc.nextLine();
 		for (TodoItem item : l.getList()) {
-			if (num == item.getID()) {
-				System.out.println(item);
-				System.out.println("위 항목을 삭제하시겠습니까? (y/n)\n");
-				String input = sc.next().trim();
-				if(Objects.equals(input, "y")) {
-					if(l.deleteItem(item) > 0) {
-						System.out.println("삭제되었습니다.\n");
-						isDeleted = true;
-					}
+			for(String s : selectedNum) {
+				if (Integer.parseInt((s)) == item.getID()) {
+					System.out.println(item);
+					doesExist = true;
+					break;
 				}
-				else return;
-			break;
 			}
 		}
-		if(!isDeleted) System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+		if(doesExist) {
+			System.out.println("위 항목을 삭제하시겠습니까? (y/n)\n");
+			input = sc.next().trim();
+			if (Objects.equals(input, "y")) {
+				if (l.deleteItem(selectedNum) > 0) {
+					System.out.println("삭제되었습니다.\n");
+				}
+			} else System.out.println("취소되었습니다.\n");
+		}
+		else System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
 	}
 
 
@@ -152,20 +162,42 @@ public class TodoUtil {
 			System.out.println("할 일이 수정되었습니다.\n");
 	}
 
-	public static void completeItem(TodoList l, int index) {
+	public static void completeItem(TodoList l, String multiIndex) {
 		boolean isFound = false;
+		List<String> selectedIndex;
+		ArrayList<Integer>isChecked = new ArrayList<>();
+		ArrayList<Integer>isUnchecked = new ArrayList<>();
+
+		if(multiIndex.contains(",")) selectedIndex = List.of(multiIndex.split(", "));
+		else selectedIndex = List.of(multiIndex.split(" "));
 
 		for(TodoItem t : l.getList()) {
-			if(t.getID() == index) {
-				l.checkItem(index, t.getIsCompleted());
-				if(t.getIsCompleted() > 0)
-					System.out.println("취소 표시되었습니다.\n");
-				else System.out.println("완료 표시되었습니다.\n");
-				isFound = true;
-				break;
+			for(String s : selectedIndex) {
+				if (t.getID() == Integer.parseInt(s)) {
+					l.checkItem(t.getID(), t.getIsCompleted());
+					if(t.getIsCompleted() == 0) isChecked.add(t.getID());
+					else isUnchecked.add(t.getID());
+					isFound = true;
+					break;
+				}
 			}
 		}
-		if(!isFound) System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+		if(!isFound) {
+			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+			return;
+		}
+		System.out.println("<결과>");
+		System.out.print("체크 표시: ");
+		for(int i : isChecked) {
+			System.out.print(i + "번 ");
+		}
+
+		System.out.println();
+		System.out.print("체크 표시 취소: ");
+		for(int i : isUnchecked) {
+			System.out.print(i + "번 ");
+		}
+		System.out.println("\n");
 	}
 
 	public static void listAll(TodoList l) {

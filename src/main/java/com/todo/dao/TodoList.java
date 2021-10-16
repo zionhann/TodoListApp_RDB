@@ -43,15 +43,15 @@ public class TodoList {
 		return isAdded;
 	}
 
-	public int deleteItem(TodoItem t) {
-		String sql = "DELETE FROM list WHERE ID=?;";
-		PreparedStatement ps;
+	public int deleteItem(List<String> selectedNum) {
+		Statement s;
 		int isDeleted=0;
+		String id = String.join(" OR ID= ", selectedNum);
+		String sql = "DELETE FROM list WHERE ID=" + id + ";";
 		try {
-			ps = con.prepareStatement(sql);
-			ps.setInt(1, t.getID());
-			isDeleted = ps.executeUpdate();
-			ps.close();
+			s = con.createStatement();
+			isDeleted = s.executeUpdate(sql);
+			s.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
