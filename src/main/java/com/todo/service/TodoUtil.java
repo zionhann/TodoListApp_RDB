@@ -173,12 +173,17 @@ public class TodoUtil {
 
 		for(TodoItem t : l.getList()) {
 			for(String s : selectedIndex) {
-				if (t.getID() == Integer.parseInt(s)) {
-					l.checkItem(t.getID(), t.getIsCompleted());
-					if(t.getIsCompleted() == 0) isChecked.add(t.getID());
-					else isUnchecked.add(t.getID());
-					isFound = true;
-					break;
+				try {
+					if (t.getID() == Integer.parseInt(s)) {
+						l.checkItem(t.getID(), t.getIsCompleted());
+						if (t.getIsCompleted() == 0) isChecked.add(t.getID());
+						else isUnchecked.add(t.getID());
+						isFound = true;
+						break;
+					}
+				} catch(NumberFormatException e) {
+					System.out.println("잘못된 명령어입니다. (명렁어 보기 -help)");
+					return;
 				}
 			}
 		}
