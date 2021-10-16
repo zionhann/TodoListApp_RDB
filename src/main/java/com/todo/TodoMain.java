@@ -35,8 +35,8 @@ public class TodoMain {
 				break;
 
 			case "comp": {
-				int index = sc.nextInt();
-				TodoUtil.completeItem(l, index);
+				String multiIndex = sc.nextLine().trim();
+				TodoUtil.completeItem(l, multiIndex);
 				break;
 			}
 				

@@ -1,10 +1,12 @@
 package com.todo.service;
 
-import java.io.*;
-import java.util.*;
-
 import com.todo.dao.TodoItem;
 import com.todo.dao.TodoList;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class TodoUtil {
 
@@ -160,20 +162,42 @@ public class TodoUtil {
 			System.out.println("할 일이 수정되었습니다.\n");
 	}
 
-	public static void completeItem(TodoList l, int index) {
+	public static void completeItem(TodoList l, String multiIndex) {
 		boolean isFound = false;
+		List<String> selectedIndex;
+		ArrayList<Integer>isChecked = new ArrayList<>();
+		ArrayList<Integer>isUnchecked = new ArrayList<>();
+
+		if(multiIndex.contains(",")) selectedIndex = List.of(multiIndex.split(", "));
+		else selectedIndex = List.of(multiIndex.split(" "));
 
 		for(TodoItem t : l.getList()) {
-			if(t.getID() == index) {
-				l.checkItem(index, t.getIsCompleted());
-				if(t.getIsCompleted() > 0)
-					System.out.println("취소 표시되었습니다.\n");
-				else System.out.println("완료 표시되었습니다.\n");
-				isFound = true;
-				break;
+			for(String s : selectedIndex) {
+				if (t.getID() == Integer.parseInt(s)) {
+					l.checkItem(t.getID(), t.getIsCompleted());
+					if(t.getIsCompleted() == 0) isChecked.add(t.getID());
+					else isUnchecked.add(t.getID());
+					isFound = true;
+					break;
+				}
 			}
 		}
-		if(!isFound) System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+		if(!isFound) {
+			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+			return;
+		}
+		System.out.println("<결과>");
+		System.out.print("체크 표시: ");
+		for(int i : isChecked) {
+			System.out.print(i + "번 ");
+		}
+
+		System.out.println();
+		System.out.print("체크 표시 취소: ");
+		for(int i : isUnchecked) {
+			System.out.print(i + "번 ");
+		}
+		System.out.println("\n");
 	}
 
 	public static void listAll(TodoList l) {
