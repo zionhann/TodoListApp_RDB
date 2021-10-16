@@ -11,6 +11,8 @@ public class TodoUtil {
 	public static void createItem(TodoList list) {
 
 		String title, desc, category, due_date;
+		int priority;
+
 		Scanner sc = new Scanner(System.in);
 
 		System.out.println("\n"
@@ -18,6 +20,9 @@ public class TodoUtil {
 				+ "카테고리를 입력하세요.");
 
 		category = sc.nextLine();
+
+		if(!list.isDuplicateCate(category))
+			list.addCate(category);
 
 		System.out.println("\n"
 				+ "할 일을 입력하세요.");
@@ -44,7 +49,15 @@ public class TodoUtil {
 			return;
 		}
 
-		TodoItem t = new TodoItem(title, desc, category, due_date, false);
+		System.out.println("\n" +
+				"우선순위를 입력하세요.(1 ~ 3)");
+		priority = sc.nextInt();
+		if(priority < 1 || priority > 3) {
+			System.out.println("잘못된 값입니다.\n");
+			return;
+		}
+
+		TodoItem t = new TodoItem(title, desc, category, due_date, false, priority);
 		if(list.addItem(t)>0)
 			System.out.println("추가되었습니다.");
 	}
@@ -101,6 +114,9 @@ public class TodoUtil {
 		System.out.println("\n새로운 카테고리를 입력하세요.");
 		String new_category = sc.nextLine().trim();
 
+		if(!l.isDuplicateCate(new_category))
+			l.addCate(new_category);
+
 		System.out.println("\n새로운 할 일을 입력하세요.");
 		String new_title = sc.nextLine().trim();
 		if (l.isDuplicate(new_title, l.getList()) && l.isDuplicateCate(new_category, l.getList())) {
@@ -122,7 +138,15 @@ public class TodoUtil {
 			return;
 		}
 
-		TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date, false);
+		System.out.println("\n" +
+				"새로운 우선순위를 입력하세요.(1 ~ 3)");
+		int priority = sc.nextInt();
+		if(priority < 1 || priority > 3) {
+			System.out.println("잘못된 값입니다.\n");
+			return;
+		}
+
+		TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date, false, priority);
 		t.setID(num);
 		if(l.editItem(t) > 0)
 			System.out.println("할 일이 수정되었습니다.\n");
@@ -133,8 +157,8 @@ public class TodoUtil {
 
 		for(TodoItem t : l.getList()) {
 			if(t.getID() == index) {
-				l.checkItem(index, t.isCompleted());
-				if(t.isCompleted() > 0)
+				l.checkItem(index, t.getIsCompleted());
+				if(t.getIsCompleted() > 0)
 					System.out.println("취소 표시되었습니다.\n");
 				else System.out.println("완료 표시되었습니다.\n");
 				isFound = true;
