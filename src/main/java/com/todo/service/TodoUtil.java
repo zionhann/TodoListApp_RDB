@@ -21,9 +21,6 @@ public class TodoUtil {
 
 		category = sc.nextLine();
 
-		if(!list.isDuplicateCate(category))
-			list.addCate(category);
-
 		System.out.println("\n"
 				+ "할 일을 입력하세요.");
 
@@ -56,6 +53,9 @@ public class TodoUtil {
 			System.out.println("잘못된 값입니다.\n");
 			return;
 		}
+
+		if(!list.isDuplicateCate(category))
+			list.addCate(category);
 
 		TodoItem t = new TodoItem(title, desc, category, due_date, false, priority);
 		if(list.addItem(t)>0)
