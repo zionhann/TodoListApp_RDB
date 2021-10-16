@@ -11,8 +11,9 @@ public class TodoItem {
     private String category;
     private String due_date;
     private boolean isCompleted;
+    private int priority;
 
-    public TodoItem(String title, String desc, String category, String due_date, boolean isCompleted){
+    public TodoItem(String title, String desc, String category, String due_date, boolean isCompleted, int priority){
         this.title=title;
         this.desc=desc;
         this.category = category;
@@ -20,6 +21,7 @@ public class TodoItem {
         this.current_date= curDate.format(new Date());
         this.due_date = due_date.substring(0, 4) + "/" + due_date.substring(4, 6) + "/" + due_date.substring(6, 8);
         this.isCompleted = isCompleted;
+        this.priority = priority;
     }
     
     public String getTitle() {
@@ -51,7 +53,8 @@ public class TodoItem {
     public void setDue_date(String due_date) { this.due_date = due_date; }
 
     @Override
-    public String toString() { return "[" + isCompleted(isCompleted) + "] " + ID + " [" + category + "] " + title + " - " + desc + " - " + due_date + " - " + current_date; }
+    public String toString() { return ((ID<10)?"0"+ID:ID) + " [" + isCompleted2String(isCompleted) + "]" +  " [" + category + "] "
+                                    + priority + "순위 " + title + " - " + desc + " - " + due_date + " - " + current_date; }
 
     public String getCategory() {
         return category;
@@ -69,12 +72,15 @@ public class TodoItem {
         this.ID = ID;
     }
 
-    public int isCompleted() {
+    public int getIsCompleted() {
         return (isCompleted)?1:0;
     }
 
-    //@Overload
-    public String isCompleted(boolean isCompleted) {
+    public String isCompleted2String(boolean isCompleted) {
         return (isCompleted)?"V":" ";
+    }
+
+    public int getPriority() {
+        return priority;
     }
 }
