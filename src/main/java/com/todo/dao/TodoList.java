@@ -281,7 +281,7 @@ public class TodoList {
 			ResultSet r = p.executeQuery();
 
 			while(r.next()) {
-				id = r.getInt("ID");
+				id = r.getInt("categoryId");
 			}
 			p.close();
 		} catch (SQLException e) {
@@ -420,23 +420,27 @@ public class TodoList {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
 			String line;
-			String sql = "INSERT INTO list (Title, Memo, Category, Current_date, Due_date)"
-					+ "VALUES (?, ?, ?, ?, ?);";
+			String sql = "INSERT INTO list (Title, Memo, Current_date, Due_date, Priority, Category_id)"
+					+ "VALUES (?, ?, ?, ?, ?, ?);";
 			int records = 0;
 			while((line = br.readLine()) != null){
 				StringTokenizer st = new StringTokenizer(line, "##");
-				String category = st.nextToken();
+				//String category = st.nextToken();
 				String title = st.nextToken();
 				String memo = st.nextToken();
 				String due_date = st.nextToken();
 				String current_date = st.nextToken();
+				String priority = st.nextToken();
+				String categoryId = st.nextToken();
 
 				PreparedStatement ps = con.prepareStatement(sql);
 				ps.setString(1, title);
 				ps.setString(2, memo);
-				ps.setString(3, category);
-				ps.setString(4, current_date);
-				ps.setString(5, due_date);
+				//ps.setString(3, category);
+				ps.setString(3, current_date);
+				ps.setString(4, due_date);
+				ps.setInt(5, Integer.parseInt(priority));
+				ps.setInt(6, Integer.parseInt(categoryId));
 				int count = ps.executeUpdate();
 				if(count > 0) records++;
 				ps.close();
