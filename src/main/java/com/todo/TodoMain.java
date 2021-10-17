@@ -33,6 +33,7 @@ public class TodoMain {
 				case "ls" -> TodoUtil.listAll(l);
 				case "ls_comp" -> TodoUtil.listAll(l, true, "isCompleted");
 				case "ls_cate" -> TodoUtil.listCate(l);
+				case "ls_priority" -> TodoUtil.listAll(l, "Priority", false);
 				case "ls_name_asc" -> TodoUtil.listAll(l, "Title", false);
 				case "ls_name_desc" -> TodoUtil.listAll(l, "Title", true);
 				case "ls_date" -> TodoUtil.listAll(l, "Due_date", false);
