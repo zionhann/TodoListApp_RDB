@@ -11,6 +11,8 @@ import com.todo.service.TodoSortByDate;
 import com.todo.service.TodoSortByName;
 import com.todo.db.DBConnect;
 
+import javax.xml.transform.Result;
+
 public class TodoList {
 	private List<TodoItem> list; // this will be deleted
 	private Connection con;
@@ -21,7 +23,7 @@ public class TodoList {
 	}
 
 	public int addItem(TodoItem t) {
-		String sql = "INSERT INTO list (Title, Memo, Current_date, Due_date, isCompleted, Priority, Category_id)"
+		String sql = "INSERT INTO list (Title, Memo, Current_date, Due_date, isCompleted, Priority, Category_id) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?);";
 		PreparedStatement ps;
 		int categoryId = getCategoryId(t.getCategory());
@@ -59,7 +61,7 @@ public class TodoList {
 	}
 
 	public int editItem(TodoItem t) {
-		String sql = "UPDATE list SET Title=?, Memo=?, Current_date=?, Due_date=?, Priority=?, Category_id=?"
+		String sql = "UPDATE list SET Title=?, Memo=?, Current_date=?, Due_date=?, Priority=?, Category_id=? "
 					+ "WHERE ID=?;";
 		PreparedStatement ps;
 		int categoryId = getCategoryId(t.getCategory());
@@ -82,7 +84,7 @@ public class TodoList {
 	}
 
 	public void checkItem(int index, int isCompleted) {
-		String sql = "UPDATE list SET isCompleted=?"
+		String sql = "UPDATE list SET isCompleted=? "
 					+ "WHERE ID=?;";
 		try {
 			PreparedStatement p = con.prepareStatement(sql);
@@ -95,6 +97,19 @@ public class TodoList {
 		}
 	}
 
+	public void move2(TodoItem t) {
+		String sql = "UPDATE list SET Pinned=? WHERE ID=?;";
+
+		try {
+			PreparedStatement p = con.prepareStatement(sql);
+			p.setInt(1, (t.isPinned())?0:1);
+			p.setInt(2, t.getID());
+			p.executeUpdate();
+			p.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	public void addCate(String keyword)  {
 		String sql = "INSERT INTO category (Name) VALUES(?);";
 		PreparedStatement p;
@@ -112,7 +127,7 @@ public class TodoList {
 		Statement s;
 		try {
 			s = con.createStatement();
-			String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id=category.ID;";
+			String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id=category.categoryId;";
 			ResultSet r = s.executeQuery(sql);
 
 			while(r.next()) {
@@ -124,8 +139,9 @@ public class TodoList {
 				String current_date = r.getString("Current_date");
 				int isCompleted = r.getInt("isCompleted");
 				int priority = r.getInt("Priority");
+				int isPinned = r.getInt("Pinned");
 
-				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0, priority);
+				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0, priority, isPinned>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);
@@ -141,7 +157,7 @@ public class TodoList {
 	//@overload
 	public ArrayList<TodoItem> getList(String keyword) {
 		ArrayList<TodoItem> list = new ArrayList<>();
-		String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id = category.ID WHERE Title LIKE ? OR Memo LIKE ?;";
+		String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id = category.categoryId WHERE Title LIKE ? OR Memo LIKE ?;";
 		PreparedStatement ps;
 		try {
 			ps = con.prepareStatement(sql);
@@ -157,8 +173,9 @@ public class TodoList {
 				String current_date = r.getString("Current_date");
 				int isCompleted = r.getInt("isCompleted");
 				int priority = r.getInt("Priority");
+				int isPinned = r.getInt("Pinned");
 
-				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0, priority);
+				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0, priority, isPinned>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);
@@ -172,13 +189,13 @@ public class TodoList {
 	}
 
 	//@Overload
-	public ArrayList<TodoItem> getList(boolean isCompleted) {
+	public ArrayList<TodoItem> getList(boolean value, String keyword) {
 		ArrayList<TodoItem> list = new ArrayList<>();
-		String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id = category.ID "
-					+ "WHERE isCompleted =?;";
+		String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id = category.categoryId "
+					+ "WHERE " + keyword + "=?;";
 		try {
 			PreparedStatement p = con.prepareStatement(sql);
-			p.setInt(1, (isCompleted)?1:0);
+			p.setInt(1, (value)?1:0);
 			ResultSet r = p.executeQuery();
 
 			while(r.next()){
@@ -190,8 +207,9 @@ public class TodoList {
 				String current_date = r.getString("Current_date");
 				int completed = r.getInt("isCompleted");
 				int priority = r. getInt("Priority");
+				int isPinned = r.getInt("Pinned");
 
-				TodoItem item = new TodoItem(title, desc, category, due_date, completed>0, priority);
+				TodoItem item = new TodoItem(title, desc, category, due_date, completed>0, priority, isPinned>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);
@@ -206,8 +224,7 @@ public class TodoList {
 
 	public ArrayList<TodoItem> getList_cate(String keyword) {
 		ArrayList<TodoItem> list = new ArrayList<>();
-		String sql = "SELECT list.ID, list.Title, list.Memo, list.Due_date, list.Current_date, list.isCompleted, list.Priority, category.Name"
-					+ " FROM list INNER JOIN category ON list.Category_id=category.ID WHERE Name= ?;";
+		String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id=category.categoryId WHERE Name=?;";
 		PreparedStatement ps;
 		try {
 			ps = con.prepareStatement(sql);
@@ -222,8 +239,9 @@ public class TodoList {
 				String current_date = r.getString("Current_date");
 				int isCompleted = r.getInt("isCompleted");
 				int priority = r.getInt("Priority");
+				int isPinned = r.getInt("Pinned");
 
-				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0, priority);
+				TodoItem item = new TodoItem(title, desc, category, due_date, isCompleted>0, priority, isPinned>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);
@@ -254,7 +272,7 @@ public class TodoList {
 	}
 
 	public int getCategoryId(String keyword) {
-		String sql = "SELECT ID FROM category WHERE Name=?";
+		String sql = "SELECT categoryId FROM category WHERE Name=?";
 		int id=1;
 
 		try {
@@ -308,7 +326,8 @@ public class TodoList {
 
 	public ArrayList<TodoItem> orderBy(String keyword, boolean desc) {
 		ArrayList<TodoItem> list = new ArrayList<>();
-		String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id = category.ID "
+		String sql = "SELECT * FROM list INNER JOIN category ON list.Category_id = category.categoryId "
+					+ "WHERE Pinned=0 "
 					+ "ORDER BY " + keyword;
 		if(desc) sql += " DESC";
 		try {
@@ -324,8 +343,9 @@ public class TodoList {
 				String current_date = r.getString("Current_date");
 				int isCompleted = r.getInt("isCompleted");
 				int priority = r.getInt("Priority");
+				int isPinned = r.getInt("Pinned");
 
-				TodoItem item = new TodoItem(title, memo, category, due_date, isCompleted>0, priority);
+				TodoItem item = new TodoItem(title, memo, category, due_date, isCompleted>0, priority, isPinned>0);
 				item.setID(id);
 				item.setCurrent_date(current_date);
 				item.setDue_date(due_date);

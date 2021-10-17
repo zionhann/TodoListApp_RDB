@@ -26,8 +26,12 @@ public class TodoMain {
 					String multiIndex = sc.nextLine().trim();
 					TodoUtil.completeItem(l, multiIndex);
 				}
+				case "pin" -> {
+					int input = sc.nextInt();
+					TodoUtil.pinItem(l, input);
+				}
 				case "ls" -> TodoUtil.listAll(l);
-				case "ls_comp" -> TodoUtil.listAll(l, true);
+				case "ls_comp" -> TodoUtil.listAll(l, true, "isCompleted");
 				case "ls_cate" -> TodoUtil.listCate(l);
 				case "ls_name_asc" -> TodoUtil.listAll(l, "Title", false);
 				case "ls_name_desc" -> TodoUtil.listAll(l, "Title", true);

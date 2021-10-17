@@ -12,8 +12,9 @@ public class TodoItem {
     private String due_date;
     private boolean isCompleted;
     private int priority;
+    private boolean isPinned;
 
-    public TodoItem(String title, String desc, String category, String due_date, boolean isCompleted, int priority){
+    public TodoItem(String title, String desc, String category, String due_date, boolean isCompleted, int priority, boolean isPinned){
         this.title=title;
         this.desc=desc;
         this.category = category;
@@ -22,6 +23,7 @@ public class TodoItem {
         this.due_date = due_date.substring(0, 4) + "/" + due_date.substring(4, 6) + "/" + due_date.substring(6, 8);
         this.isCompleted = isCompleted;
         this.priority = priority;
+        this.isPinned = isPinned;
     }
     
     public String getTitle() {
@@ -53,7 +55,7 @@ public class TodoItem {
     public void setDue_date(String due_date) { this.due_date = due_date; }
 
     @Override
-    public String toString() { return ((ID<10)?"0"+ID:ID) + " [" + isCompleted2String(isCompleted) + "]" +  " [" + category + "] "
+    public String toString() { return isPinned2String(isPinned) + ((ID<10)?"0"+ID:ID) + " [" + isCompleted2String(isCompleted) + "]" +  " [" + category + "] "
                                     + priority + "순위 " + title + " - " + desc + " - " + due_date + " - " + current_date; }
 
     public String getCategory() {
@@ -82,5 +84,15 @@ public class TodoItem {
 
     public int getPriority() {
         return priority;
+    }
+
+    public int isPinned2Int() {
+        return (isPinned)?1:0;
+    }
+
+    public String isPinned2String(boolean isPinned) { return (isPinned)?"[고정됨] ":""; }
+
+    public boolean isPinned() {
+        return isPinned;
     }
 }

@@ -59,7 +59,7 @@ public class TodoUtil {
 		if(!list.isDuplicateCate(category))
 			list.addCate(category);
 
-		TodoItem t = new TodoItem(title, desc, category, due_date, false, priority);
+		TodoItem t = new TodoItem(title, desc, category, due_date, false, priority, false);
 		if(list.addItem(t)>0)
 			System.out.println("추가되었습니다.");
 	}
@@ -156,7 +156,7 @@ public class TodoUtil {
 			return;
 		}
 
-		TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date, false, priority);
+		TodoItem t = new TodoItem(new_title, new_description, new_category, new_due_date, false, priority, false);
 		t.setID(num);
 		if(l.editItem(t) > 0)
 			System.out.println("할 일이 수정되었습니다.\n");
@@ -205,9 +205,31 @@ public class TodoUtil {
 		System.out.println("\n");
 	}
 
+	public static void pinItem(TodoList l, int input) {
+
+		boolean isFound = false;
+
+		for( TodoItem t : l.getList()) {
+			if(t.getID() == input) {
+				l.move2(t);
+				System.out.println(input + "번 할 일이 고정되었습니다.\n");
+				isFound = true;
+				break;
+			}
+		}
+		if(!isFound) {
+			System.out.println("번호에 해당하는 할 일을 찾을 수 없습니다.\n");
+			return;
+		}
+	}
+
 	public static void listAll(TodoList l) {
 		System.out.println(l.numberOf() + " items");
-		for (TodoItem item : l.getList()) {
+		for (TodoItem item : l.getList(true, "Pinned")) {
+			System.out.println(item.toString());
+		}
+		System.out.println();
+		for (TodoItem item : l.getList(false, "Pinned")) {
 			System.out.println(item.toString());
 		}
 	}
@@ -215,15 +237,20 @@ public class TodoUtil {
 	//@overload
 	public static void listAll(TodoList l, String keyword, boolean desc) {
 		System.out.println(l.numberOf() + " items");
+
+		for (TodoItem item : l.getList(true, "Pinned")) {
+			System.out.println(item.toString());
+		}
+		System.out.println();
 		for (TodoItem item : l.orderBy(keyword, desc)) {
 			System.out.println(item.toString());
 		}
 	}
 
 	//@overload
-	public static void listAll(TodoList l, boolean isCompleted) {
-		System.out.println(l.numberOf(isCompleted) + " items");
-		for (TodoItem item : l.getList(isCompleted)) {
+	public static void listAll(TodoList l, boolean value, String keyword) {
+		System.out.println(l.numberOf(value) + " items");
+		for (TodoItem item : l.getList(value, keyword)) {
 			System.out.println(item.toString());
 		}
 	}
